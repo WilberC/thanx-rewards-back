@@ -10,7 +10,53 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_12_055335) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_12_185345) do
+  create_table "reward_catalogs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "points_cost"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "reward_redemptions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "reward_catalog_id", null: false
+    t.integer "points_spent"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reward_catalog_id"], name: "index_reward_redemptions_on_reward_catalog_id"
+    t.index ["user_id"], name: "index_reward_redemptions_on_user_id"
+  end
+
+  create_table "reward_tiers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.integer "points_required"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "reward_transactions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "points"
+    t.string "transaction_type"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_reward_transactions_on_user_id"
+  end
+
+  create_table "user_rewards", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "reward_tier_id", null: false
+    t.integer "points"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reward_tier_id"], name: "index_user_rewards_on_reward_tier_id"
+    t.index ["user_id"], name: "index_user_rewards_on_user_id"
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "last_name"
@@ -19,4 +65,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_12_055335) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_foreign_key "reward_redemptions", "reward_catalogs"
+  add_foreign_key "reward_redemptions", "users"
+  add_foreign_key "reward_transactions", "users"
+  add_foreign_key "user_rewards", "reward_tiers"
+  add_foreign_key "user_rewards", "users"
 end

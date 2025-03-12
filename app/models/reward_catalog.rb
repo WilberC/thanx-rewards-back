@@ -1,0 +1,2 @@
+class RewardCatalog < ApplicationRecord
+end
