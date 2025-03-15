@@ -53,8 +53,6 @@ production:
   primary: &primary_production
     <<: *default
     database: thanx_rewards_back_production
-    username: thanx_rewards_back
-    password: <%= ENV["THANX_REWARDS_BACK_DATABASE_PASSWORD"] %>
   cache:
     <<: *primary_production
     database: thanx_rewards_back_production_cache
