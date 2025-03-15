@@ -9,8 +9,19 @@ Rails.application.routes.draw do
   # root "posts#index"
   namespace :api do
     namespace :v1 do
+      get "reward_redemptions/create"
+      get "reward_redemptions/index"
+      get "reward_catalog/index"
+      get "reward_transactions/create"
+      get "user_rewards/show"
+      get "reward_tiers/index"
       resources :users
       post "login", to: "auth#login"
+      resources :reward_tiers, only: [:index]
+      resource :user_reward, only: [:show] # Singular since each user has only one reward record
+      resources :reward_transactions, only: [:create]
+      resources :reward_catalog, only: [:index]
+      resources :reward_redemptions, only: [:create, :index]
     end
   end
 end
